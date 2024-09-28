@@ -1,25 +1,33 @@
 package modelo;
 
 public class Terreno extends Financing {
+    private String tipoZona;
+    private static final double ACRECIMO_PARCELA = 0.02;
 
-    private static final double ACRÉSCIMO = 0.02; // 2% de acréscimo
-
-    public Terreno(double desiredPropertyValue, int annualFinancingPeriod, double annualInterestRate) {
-        super(desiredPropertyValue, annualFinancingPeriod, annualInterestRate);
+    // Construtor
+    public Terreno(double propertyValue, int financingPeriod, double annualInterestRate, String tipoZona) {
+        super(propertyValue, financingPeriod, annualInterestRate);
+        this.tipoZona = tipoZona;
     }
 
     @Override
     public double calculateMonthlyPayment() {
-        // Calcula o valor da parcela mensal normal
-        double baseMonthlyPayment = super.calculateMonthlyPayment();
-        // Aplica o acréscimo de 2%
-        return baseMonthlyPayment * (1 + ACRÉSCIMO);
+        double monthlyPayment = (propertyValue / (financingPeriod * 12)) * (1 + (annualInterestRate / 12));
+        return monthlyPayment * (1 + ACRECIMO_PARCELA);
+    }
+
+    @Override
+    public double calculateTotalPayment() {
+        return calculateMonthlyPayment() * financingPeriod * 12;
     }
 
     @Override
     public void showFinancingData() {
-        super.showFinancingData();
-        System.out.println("Acréscimo de 2% aplicado nas parcelas devido ao risco de inadimplência.");
-        System.out.println("Valor total da parcela mensal (com acréscimo): R$" + calculateMonthlyPayment());
+        System.out.println("Valor do imóvel (Terreno): R$" + propertyValue);
+        System.out.println("Período do financiamento: " + financingPeriod + " anos");
+        System.out.println("Taxa de juros anual: " + annualInterestRate + "%");
+        System.out.println("Tipo de zona: " + tipoZona);
+        System.out.println("Valor da parcela mensal (com acréscimo): R$" + calculateMonthlyPayment());
+        System.out.println("Valor total do financiamento (com acréscimo): R$" + calculateTotalPayment());
     }
 }

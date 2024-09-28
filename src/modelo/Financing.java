@@ -1,53 +1,35 @@
 package modelo;
 
-public class Financing {
-    //attributes
+public abstract class Financing {
+    // Atributos comuns a todos os tipos de financiamento
+    protected double propertyValue;
+    protected int financingPeriod;
+    protected double annualInterestRate;
 
-    private static double propertyValue;
-    private int financingPeriod;
-    private double annualInterestRate;
-
-    //Getter
-
-    public double getPropertyValue(){
-        return this.propertyValue;
-    }
-
-    public int getFinancingPeriod(){
-        return this.financingPeriod;
-    }
-
-    public double getAnnualInterestRate(){
-        return this.annualInterestRate;
-    }
-
-    //methods
-
-    //construtor
-    public Financing (double desiredPropertyValue, int annualFinancingPeriod, double annualInterestRate){
-        this.propertyValue = desiredPropertyValue;
-        this.financingPeriod = annualFinancingPeriod;
+    // Construtor
+    public Financing(double propertyValue, int financingPeriod, double annualInterestRate) {
+        this.propertyValue = propertyValue;
+        this.financingPeriod = financingPeriod;
         this.annualInterestRate = annualInterestRate;
     }
 
+    // Métodos abstratos a serem implementados pelas subclasses
+    public abstract double calculateMonthlyPayment();
 
-    public double calculateMonthlyPayment(){
-        return (this.propertyValue / (this.financingPeriod * 12)) * (1 + (this.annualInterestRate / 12));
+    public abstract double calculateTotalPayment();
+
+    public abstract void showFinancingData();
+
+    // Getters
+    public double getPropertyValue() {
+        return propertyValue;
     }
 
-    public double calculateTotalPayment(){
-        return calculateMonthlyPayment() * this.financingPeriod * 12;
+    public int getFinancingPeriod() {
+        return financingPeriod;
     }
 
-
-    // method for showing financing data
-
-    public void showFinancingData() {
-        System.out.println("Valor do imóvel: R$" + propertyValue);
-        System.out.println("Período do financiamento: " + financingPeriod + " anos");
-        System.out.println("Taxa de juros anual: " + annualInterestRate + "%");
-        System.out.println("Valor da parcela mensal: R$" + calculateMonthlyPayment());
-        System.out.println("Valor total do financiamento: R$" + calculateTotalPayment());
+    public double getAnnualInterestRate() {
+        return annualInterestRate;
     }
-
 }

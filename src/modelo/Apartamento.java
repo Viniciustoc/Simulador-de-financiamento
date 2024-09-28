@@ -1,24 +1,36 @@
 package modelo;
 
 public class Apartamento extends Financing {
+    private int numeroVagasGaragem;
+    private int numeroAndar;
 
-    public Apartamento(double desiredPropertyValue, int annualFinancingPeriod, double annualInterestRate) {
-        super(desiredPropertyValue, annualFinancingPeriod, annualInterestRate);
+    // Construtor
+    public Apartamento(double propertyValue, int financingPeriod, double annualInterestRate, int numeroVagasGaragem, int numeroAndar) {
+        super(propertyValue, financingPeriod, annualInterestRate);
+        this.numeroVagasGaragem = numeroVagasGaragem;
+        this.numeroAndar = numeroAndar;
     }
 
     @Override
     public double calculateMonthlyPayment() {
-        double monthlyInterestRate = (getAnnualInterestRate() / 100) / 12; // Taxa mensal
-        int totalMonths = getFinancingPeriod() * 12; // Período em meses
+        double taxaMensal = annualInterestRate / 12;
+        int meses = financingPeriod * 12;
+        return (propertyValue * Math.pow(1 + taxaMensal, meses) * taxaMensal) / (Math.pow(1 + taxaMensal, meses) - 1);
+    }
 
-        // Fórmula do sistema PRICE para calcular o pagamento mensal
-        return (getPropertyValue() * Math.pow(1 + monthlyInterestRate, totalMonths) * monthlyInterestRate) /
-                (Math.pow(1 + monthlyInterestRate, totalMonths) - 1);
+    @Override
+    public double calculateTotalPayment() {
+        return calculateMonthlyPayment() * financingPeriod * 12;
     }
 
     @Override
     public void showFinancingData() {
-        super.showFinancingData();
-        System.out.println("Sistema de amortização: PRICE");
+        System.out.println("Valor do imóvel (Apartamento): R$" + propertyValue);
+        System.out.println("Período do financiamento: " + financingPeriod + " anos");
+        System.out.println("Taxa de juros anual: " + annualInterestRate + "%");
+        System.out.println("Número de vagas na garagem: " + numeroVagasGaragem);
+        System.out.println("Número do andar: " + numeroAndar);
+        System.out.println("Valor da parcela mensal: R$" + calculateMonthlyPayment());
+        System.out.println("Valor total do financiamento: R$" + calculateTotalPayment());
     }
 }
